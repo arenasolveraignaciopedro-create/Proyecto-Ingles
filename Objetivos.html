@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestros Objetivos - Curso de Inglés Dinámico</title>
+    <style>
+        :root {
+            --primario: #2563eb;
+            --secundario: #10b981;
+            --oscuro: #1e293b;
+            --claro: #f8fafc;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--claro);
+            color: var(--oscuro);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .contenedor {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: var(--primario);
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .subtitulo {
+            text-align: center;
+            color: #64748b;
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+        .tarjeta-objetivo {
+            border-left: 5px solid var(--primario);
+            background-color: #f1f5f9;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 25px;
+        }
+        .tarjeta-objetivo.social { border-left-color: var(--secundario); }
+        .tarjeta-objetivo.economico { border-left-color: #f59e0b; }
+        
+        h2 {
+            margin-top: 0;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        ul {
+            margin: 10px 0 0 0;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        .enlace-volver {
+            display: block;
+            text-align: center;
+            margin-top: 40px;
+            color: var(--primario);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .enlace-volver:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <div class="contenedor">
+        <h1>Nuestra Misión</h1>
+        <p class="subtitulo">Por qué creamos este curso y hacia dónde vamos. Un proyecto con propósito.</p>
+
+        <!-- OBJETIVO SOCIAL -->
+        <div class="tarjeta-objetivo social">
+            <h2>💡 El Enfoque Social (Impacto Educativo)</h2>
+            <ul>
+                <li><strong>Adiós a la Frustración Escolar:</strong> Transformamos el inglés de una materia aburrida en una experiencia intuitiva, dinámica y de alto impacto visual.</li>
+                <li><strong>Metodología de Dominio Asegurado:</strong> Implementamos un sistema inteligente que garantiza que el alumno domine al menos el 80% (8/10) de cada lección antes de avanzar.</li>
+            </ul>
+        </div>
+
+        <!-- OBJETIVO TECNOLÓGICO / PERSONAL -->
+        <div class="tarjeta-objetivo">
+            <h2>💻 El Enfoque de Datos (Argumento Tecnológico)</h2>
+            <ul>
+                <li><strong>Control Basado en Evidencia:</strong> Respaldado por una infraestructura de MySQL y Ciencia de Datos que registra el progreso real para optimizar el aprendizaje.</li>
+                <li><strong>Tablero Analítico:</strong> Herramientas modernas que automatizan las calificaciones y muestran reportes precisos del avance de cada estudiante.</li>
+            </ul>
+        </div>
+
+        <!-- OBJETIVO ECONÓMICO -->
+        <div class="tarjeta-objetivo economico">
+            <h2>💰 El Enfoque Económico (Escalabilidad Accesible)</h2>
+            <ul>
+                <li><strong>Democratización del Aprendizaje:</strong> Un modelo de bajo costo por licencia que derriba las barreras económicas para que cualquier persona tenga acceso.</li>
+            </ul>
+        </div>
+
+        <a href="index.html" class="enlace-volver">← Volver al Inicio del Curso</a>
+    </div>
+
+</body>
+</html>

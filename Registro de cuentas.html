@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso - Origen English</title>
+    <link rel="stylesheet" href="Diseño de registros.css">
+    <!-- Iconos de Font Awesome para que las cajas de texto tengan estilo moderno -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+</head>
+<body>
+
+    <div class="container" id="container">
+        <!-- FORMULARIO DE REGISTRO (SIGN UP) -->
+        <div class="form-container sign-up">
+            <form id="formulario-registro">
+                <h1>Crear Cuenta</h1>
+                <span>Usa tu correo para registrarte paso a paso</span>
+                
+                <div class="input-group">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="nombre" placeholder="Nombre Completo" required>
+                </div>
+                
+                <div class="input-group">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="correo" placeholder="Correo Electrónico" required>
+                </div>
+                
+                <div class="input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="password" placeholder="Contraseña" required>
+                </div>
+
+                <!-- Campo exclusivo de Origen English para códigos de activación gratuitos -->
+                <div class="input-group">
+                    <i class="fa-solid fa-key"></i>
+                    <input type="text" id="codigo" placeholder="Código de Activación" required>
+                </div>
+
+                <button type="submit">Registrarme</button>
+            </form>
+        </div>
+
+        <!-- FORMULARIO DE INICIO DE SESIÓN (SIGN IN) -->
+        <div class="form-container sign-in">
+            <form id="formulario-login">
+                <h1>Iniciar Sesión</h1>
+                <span>Ingresa con tus credenciales de alumno</span>
+                
+                <div class="input-group">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="login-correo" placeholder="Correo Electrónico" required>
+                </div>
+                
+                <div class="input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="login-password" placeholder="Contraseña" required>
+                </div>
+                
+                <button type="submit">Entrar al Curso</button>
+            </form>
+        </div>
+
+        <!-- CONTENEDOR DEL PANEL DESLIZANTE VISUAL -->
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>¡Qué bueno verte!</h1>
+                    <p>Si ya creaste tu cuenta, inicia sesión para continuar tu camino en el inglés.</p>
+                    <button class="hidden" id="login">Ir al Login</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>¡Hola, Bienvenido!</h1>
+                    <p>Regístrate con tus datos personales para desbloquear tu acceso al curso.</p>
+                    <button class="hidden" id="register">Registrarme</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. LÓGICA DE ANIMACIÓN DESLIZANTE (DEL VIDEO) ---
+        const container = document.getElementById('container');
+        const registerBtn = document.getElementById('register');
+        const loginBtn = document.getElementById('login');
+
+        registerBtn.addEventListener('click', () => {
+            container.classList.add("active");
+        });
+
+        loginBtn.addEventListener('click', () => {
+            container.classList.remove("active");
+        });
+
+
+        // --- 2. CONTROL DE REGISTRO: ALMACENAMIENTO LOCAL EN TU LAPTOP ---
+        const codigosValidos = ["ORIGEN-GRATIS", "VERIFICADOR-2026", "PRUEBA-VIP"];
+
+        document.getElementById('formulario-registro').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            let nombreingresado = document.getElementById('nombre').value;
+            let correoingresado = document.getElementById('correo').value;
+            let passwordingresado = document.getElementById('password').value;
+            let codigoingresado = document.getElementById('codigo').value;
+
+            if (codigosValidos.includes(codigoingresado)) {
+                let usuariosRegistrados = JSON.parse(localStorage.getItem('usuarios_curso')) || [];
+
+                // Validar que el mismo correo no intente duplicar cuenta
+                let correoExiste = usuariosRegistrados.find(u => u.correo === correoingresado);
+                if (correoExiste) {
+                    alert("ERROR: Este correo ya tiene una cuenta registrada.");
+                    return;
+                }
+
+                let nuevoAlumno = {
+                    nombre: nombreingresado,
+                    correo: correoingresado,
+                    password: passwordingresado,
+                    rol: "Alumno",
+                    temaActual: "Colores",
+                    calificacionMax: 0
+                };
+
+                usuariosRegistrados.push(nuevoAlumno);
+                localStorage.setItem('usuarios_curso', JSON.stringify(usuariosRegistrados));
+
+                alert("¡Felicidades " + nombreingresado + "! Tu cuenta ha sido guardada en la base de datos.");
+                
+                // Limpiar cajas y deslizar la pantalla al Login automáticamente
+                document.getElementById('formulario-registro').reset();
+                container.classList.remove("active");
+            } else {
+                alert("ERROR: El código '" + codigoingresado + "' no es válido. Acceso denegado.");
+            }
+        });
+
+
+        // --- 3. CONTROL DE ACCESO (LOGIN): FILTRO DESARROLLADOR VS ALUMNO ---
+        document.getElementById('formulario-login').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            let correoLogin = document.getElementById('login-correo').value;
+            let passwordLogin = document.getElementById('login-password').value;
+
+            // Filtro Maestro: Si tú digitas estos datos, accedes al Panel de Control
+            if (correoLogin === "admin@origen.com" && passwordLogin === "admin123") {
+                alert("¡Acceso concedido, Desarrollador! Entrando al Panel de Control de Alumnos...");
+                // Aquí enlazaremos la pantalla secreta admin.html más adelante
+                return;
+            }
+
+            // Buscar en el Local Storage si los datos coinciden con un alumno permanente
+            let usuariosRegistrados = JSON.parse(localStorage.getItem('usuarios_curso')) || [];
+            let alumnoEncontrado = usuariosRegistrados.find(u => u.correo === correoLogin && u.password === passwordLogin);
+
+            if (alumnoEncontrado) {
+                alert("¡Bienvenido de vuelta, " + alumnoEncontrado.nombre + "! Redirigiendo al curso en el tema: " + alumnoEncontrado.temaActual);
+                // Aquí enlazaremos la pantalla del curso real más adelante
+            } else {
+                alert("ERROR: El correo o la contraseña son incorrectos.");
+            }
+        });
+    </script>
+</body>
+</html>
