@@ -1,3 +1,6 @@
+/* ==========================================================================
+   1. VARIABLES DE COLOR Y ESTILOS BASE (MODO OSCURO PREMIUM)
+   ========================================================================== */
 * {
     margin: 0;
     padding: 0;
@@ -6,139 +9,157 @@
 }
 
 body {
-  background-color: #0f172a; /* Fondo oscuro muy elegante */
-  background: linear-gradient(135deg, #1e3a8a, #0284c7); /* Degradado de azul marino a azul brillante */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  height: 100vh;
-}
-
-
-.container {
-    background-color: #ffffff;
-    border-radius: 30px;
-    /* Sombra con un toque de color neón oculto */
-    box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
-    position: relative;
-    overflow: hidden;
-    width: 768px;
-    max-width: 100%;
-    min-height: 520px; /* Le di un poco más de espacio para que no se amontone */
-}
-
-.container h1 {
-      background: linear-gradient(to right, #38bdf8, #3b82f6); /* Título en tonos azul cielo y azul rey */
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-    font-size: 2.2rem;
-    margin-bottom: 10px;
-    font-weight: 800;
-}
-
-.container p {
-    font-size: 14px;
-    line-height: 22px;
-    letter-spacing: 0.3px;
-    margin: 20px 0;
-}
-
-.container span {
-    font-size: 13px;
-    color: #64748b;
-    margin-bottom: 20px;
-    font-weight: 500;
-}
-
-.container form {
-    background-color: #ffffff;
+    background-color: #0b0f19;
+    background: linear-gradient(135deg, #070a13, #111a2e);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    padding: 0 40px;
-    height: 100%;
+    height: 100vh;
+    overflow: hidden;
 }
 
-/* Agrupador de iconos con color vistoso */
-.input-group {
+/* ==========================================================================
+   2. CONTENEDOR PRINCIPAL (EL CUADRITO DIVIDIDO)
+   ========================================================================== */
+.container {
+    background-color: #111827; /* Fondo del formulario (Antes blanco, ahora gris premium) */
+    border-radius: 30px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 50px rgba(56, 189, 248, 0.05);
     position: relative;
-    width: 100%;
-    margin: 8px 0;
+    overflow: hidden;
+    width: 768px;
+    max-width: 100%;
+    min-height: 480px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
 }
 
-.input-group i {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #6366f1; /* Iconos en azul eléctrico */
+.container p {
     font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.3px;
+    margin: 20px 0;
+    color: #9ca3af;
 }
 
-.container input {
-    background-color: #f8fafc;
-    border: 1px solid #e2e8f0;
-    margin: 0;
-    padding: 14px 15px 14px 45px;
-    font-size: 14px;
-    border-radius: 10px;
-    width: 100%;
-    outline: none;
-    transition: all 0.3s ease;
+.container span {
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 15px;
 }
 
-/* Brillo neón cuando el alumno da clic para escribir */
-.container input:focus {
-    background-color: #fff;
-    border-color: #d946ef;
-    box-shadow: 0 0 0 4px rgba(217, 70, 239, 0.15);
-}
-
-/* Botones con degradado súper llamativo */
-.container button {
-    background: linear-gradient(to right, #6366f1, #d946ef);
-    color: #fff;
-    font-size: 13px;
-    padding: 14px 45px;
-    border: none;
-    border-radius: 10px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-top: 20px;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(217, 70, 239, 0.3);
-    transition: all 0.3s ease;
-}
-
-/* Efecto cuando pasas el mouse (crece un poquito y brilla más) */
-.container button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(217, 70, 239, 0.4);
-    filter: brightness(1.1);
-}
-
-.container button.hidden {
-    background: transparent;
-    border: 2px solid #ffffff;
-    box-shadow: none;
-}
-
-.container button.hidden:hover {
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: none;
-}
-
-.form-container {
+/* ==========================================================================
+   3. ESTRUCTURA INTERNA DE FORMULARIOS E INPUTS CON ICONOS
+   ========================================================================== */
+.container .form-container {
     position: absolute;
     top: 0;
     height: 100%;
     transition: all 0.6s ease-in-out;
 }
 
+.container form {
+    background-color: #111827;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 40px;
+    height: 100%;
+    text-align: center;
+}
+
+.container h1 {
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    margin-bottom: 5px;
+    color: #ffffff;
+}
+
+/* Contenedor de la caja de texto que aloja al icono flotante */
+.input-group {
+    position: relative;
+    width: 100%;
+    margin: 8px 0;
+}
+
+/* Estilo para los iconos de Font Awesome */
+.input-group i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #4b5563; /* Color de los iconos apagados */
+    transition: color 0.3s ease;
+}
+
+.container input {
+    width: 100%;
+    padding: 12px 15px 12px 42px; /* Espaciado extra a la izquierda para el icono */
+    background-color: #1f2937;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+/* Cambios estéticos al dar clic sobre la caja de texto */
+.container input:focus {
+    outline: none;
+    border-color: #38bdf8;
+    background-color: #151f32;
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.15);
+}
+
+.container input:focus + i {
+    color: #38bdf8; /* El icono se ilumina en azul neón al escribir */
+}
+
+/* ==========================================================================
+   4. BOTONES E INTERACCIONES CON ANIMACIONES PREMIUM
+   ========================================================================== */
+.container button {
+    background: linear-gradient(135deg, #0284c7, #2563eb); /* Degradado azul eléctrico neón */
+    color: #ffffff;
+    font-size: 12px;
+    padding: 10px 45px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-top: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.25);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.container button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.45);
+    background: linear-gradient(135deg, #0ba5e9, #3b82f6);
+}
+
+.container button:active {
+    transform: translateY(-1px);
+}
+
+.container button.hidden {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: none;
+}
+
+.container button.hidden:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   5. POSICIONAMIENTO Y DESPLAZAMIENTOS DE PANELES (TUS ANIMACIONES)
+   ========================================================================== */
 .sign-in {
     left: 0;
     width: 50%;
@@ -160,20 +181,17 @@ body {
     transform: translateX(100%);
     opacity: 1;
     z-index: 5;
-    animation: show 0.6s;
+    animation: move 0.6s;
 }
 
-@keyframes show {
-    0%, 49.99% {
-        opacity: 0;
-        z-index: 1;
-    }
-    50%, 100% {
-        opacity: 1;
-        z-index: 5;
-    }
+@keyframes move {
+    0%, 49.99% { opacity: 0; z-index: 1; }
+    50%, 100% { opacity: 1; z-index: 5; }
 }
 
+/* ==========================================================================
+   6. EL PANEL DESLIZANTE VISUAL (AZUL PREMIUM)
+   ========================================================================== */
 .toggle-container {
     position: absolute;
     top: 0;
@@ -183,18 +201,17 @@ body {
     overflow: hidden;
     transition: all 0.6s ease-in-out;
     z-index: 1000;
-    border-radius: 150px 0 0 100px;
+    border-radius: 0 30px 30px 0;
 }
 
 .container.active .toggle-container {
     transform: translateX(-100%);
-    border-radius: 0 150px 100px 0;
+    border-radius: 30px 0 0 30px;
 }
 
-/* El gran panel deslizante con un degradado dinámico espectacular */
 .toggle {
-    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #c026d3 100%);
-    color: #fff;
+    background: linear-gradient(135deg, #1e3a8a, #0284c7); /* Mitad deslizable en degradado azul premium */
+    color: #ffffff;
     position: relative;
     left: -100%;
     height: 100%;
@@ -213,7 +230,7 @@ body {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    padding: 0 35px;
+    padding: 0 40px;
     text-align: center;
     top: 0;
     height: 100%;
