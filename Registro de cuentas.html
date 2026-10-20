@@ -193,28 +193,33 @@
         });
 
 
-        // --- 5. CONTROL DE ACCESO (LOGIN) ---
-        document.getElementById('formulario-login').addEventListener('submit', function(event) {
-            event.preventDefault();
+// --- 5. CONTROL DE ACCESO (LOGIN) ---
+document.getElementById('formulario-login').addEventListener('submit', function(event) {
+    event.preventDefault();
 
-            let correoLogin = document.getElementById('login-correo').value;
-            let passwordLogin = document.getElementById('login-password').value;
+    let correoLogin = document.getElementById('login-correo').value;
+    let passwordLogin = document.getElementById('login-password').value;
 
-            if (correoLogin === "admin@origen.com" && passwordLogin === "admin123") {
-                alert("¡Acceso concedido, Desarrollador! Entrando al Panel de Control de Alumnos...");
-                return;
-            }
+    if (correoLogin === "admin@origen.com" && passwordLogin === "admin123") {
+        alert("¡Acceso concedido, Desarrollador! Entrando al Panel de Control de Alumnos...");
+        return;
+    }
 
-            let usuariosRegistrados = JSON.parse(localStorage.getItem('usuarios_curso')) || [];
-            let alumnoEncontrado = usuariosRegistrados.find(u => u.correo === correoLogin && u.password === passwordLogin);
+    let usuariosRegistrados = JSON.parse(localStorage.getItem('usuarios_curso')) || [];
+    let alumnoEncontrado = usuariosRegistrados.find(u => u.correo === correoLogin && u.password === passwordLogin);
 
-            if (alumnoEncontrado) {
-                alert("¡Bienvenido de vuelta, " + alumnoEncontrado.nombre + "! Redirigiendo al curso en el tema: " + alumnoEncontrado.temaActual);
-                window.location.href = "Objetivos.html";
-            } else {
-                alert("ERROR: El correo o la contraseña son incorrectos.");
-            }
-        });
+    if (alumnoEncontrado) {
+        // LINEA NUEVA CLAVE: Guarda la sesión en la memoria de la laptop para que el menú sepa quién eres
+        localStorage.setItem('sesion_actual', JSON.stringify(alumnoEncontrado));
+
+        alert("¡Bienvenido de vuelta, " + alumnoEncontrado.nombre + "!");
+        
+        // Te redirige de inmediato a tu nuevo menú intuitivo
+        window.location.href = "menu.html";
+    } else {
+        alert("ERROR: El correo o la contraseña son incorrectos.");
+    }
+});
     </script>
 </body>
 </html>
