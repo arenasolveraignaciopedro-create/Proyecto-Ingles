@@ -13,6 +13,7 @@
     <div class="container" id="container">
         <!-- FORMULARIO DE REGISTRO (SIGN UP) -->
         <div class="form-container sign-up">
+            
             <form id="formulario-registro">
                 <h1>Crear Cuenta</h1>
                 <span>Usa tu correo para registrarte paso a paso</span>
@@ -40,6 +41,23 @@
 
                 <button type="submit">Registrarme</button>
             </form>
+
+            <!-- CONTENEDOR DE VERIFICACIÓN PREMIUM (Integrado internamente y oculto al inicio) -->
+            <div id="verification-container" class="verification-box" style="display: none; flex-direction: column; align-items: center; width: 100%;">
+                <h2>Verifica tu Correo</h2>
+                <p style="font-size: 12px; margin-bottom: 15px; color: #b3b3b3;">Hemos enviado un código de 4 dígitos.</p>
+                
+                <div class="code-inputs">
+                    <input type="text" maxlength="1" class="otp-input" data-index="0" autocomplete="off">
+                    <input type="text" maxlength="1" class="otp-input" data-index="1" autocomplete="off">
+                    <input type="text" maxlength="1" class="otp-input" data-index="2" autocomplete="off">
+                    <input type="text" maxlength="1" class="otp-input" data-index="3" autocomplete="off">
+                </div>
+
+                <button id="btn-verify" class="btn-premium">Confirmar Código</button>
+                <span class="resend-text">¿No recibiste el código? <a href="#" id="resend-code">Reenviar</a></span>
+            </div>
+
         </div>
 
         <!-- FORMULARIO DE INICIO DE SESIÓN (SIGN IN) -->
@@ -80,13 +98,15 @@
     </div>
 
     <script>
-        // --- 1. LÓGICA DE ANIMACIÓN DESLIZANTE (DEL VIDEO) ---
+        // --- 1. LÓGICA DE ANIMACIÓN DESLIZANTE ---
         const container = document.getElementById('container');
         const registerBtn = document.getElementById('register');
         const loginBtn = document.getElementById('login');
 
         registerBtn.addEventListener('click', () => {
             container.classList.add("active");
+            document.getElementById('formulario-registro').style.display = 'flex';
+            document.getElementById('verification-container').style.display = 'none';
         });
 
         loginBtn.addEventListener('click', () => {
@@ -94,8 +114,8 @@
         });
 
 
-        // --- 2. CONTROL DE REGISTRO: ALMACENAMIENTO LOCAL EN TU LAPTOP ---
-        const codigosValidos = ["ORIGEN-GRATIS", "VERIFICADOR-2026", "PRUEBA-VIP"];
+        // --- 2. CONTROL DE REGISTRO INTERNO Y CAMBIO A VERIFICACIÓN ---
+        const codigosValidos = ["ORIGEN-GRATIS", "VERIFICADOR-2026", "PRUEBA-VIP", "Brayan123"];
 
         document.getElementById('formulario-registro').addEventListener('submit', function(event) {
             event.preventDefault();
@@ -108,7 +128,6 @@
             if (codigosValidos.includes(codigoingresado)) {
                 let usuariosRegistrados = JSON.parse(localStorage.getItem('usuarios_curso')) || [];
 
-                // Validar que el mismo correo no intente duplicar cuenta
                 let correoExiste = usuariosRegistrados.find(u => u.correo === correoingresado);
                 if (correoExiste) {
                     alert("ERROR: Este correo ya tiene una cuenta registrada.");
@@ -127,97 +146,76 @@
                 usuariosRegistrados.push(nuevoAlumno);
                 localStorage.setItem('usuarios_curso', JSON.stringify(usuariosRegistrados));
 
-                alert("¡Felicidades " + nombreingresado + "! Tu cuenta ha sido guardada en la base de datos.");
+                alert("¡Datos validados, " + nombreingresado + "! Procede con la verificación de tu cuenta.");
                 
-                // Limpiar cajas y deslizar la pantalla al Login automáticamente
-                document.getElementById('formulario-registro').reset();
-                container.classList.remove("active");
+                // Ocultamos formulario de registro y abrimos la verificación
+                document.getElementById('formulario-registro').style.display = 'none';
+                document.getElementById('verification-container').style.display = 'flex';
+                
+                // Foco automático en la primera cajita
+                document.querySelector('.otp-input').focus();
             } else {
                 alert("ERROR: El código '" + codigoingresado + "' no es válido. Acceso denegado.");
             }
         });
 
 
-        // --- 3. CONTROL DE ACCESO (LOGIN): FILTRO DESARROLLADOR VS ALUMNO ---
+        // --- 3. LÓGICA DE ENFOQUE AUTOMÁTICO PARA LAS CAJITAS (OTP) ---
+        const inputs = document.querySelectorAll('.otp-input');
+        
+        inputs.forEach((input, index) => {
+            input.addEventListener('keyup', (e) => {
+                if (e.key >= 0 && e.key <= 9) {
+                    if (index < inputs.length - 1) {
+                        inputs[index + 1].focus();
+                    }
+                } else if (e.key === "Backspace") {
+                    if (index > 0) {
+                        inputs[index - 1].focus();
+                    }
+                }
+            });
+        });
+
+        // --- 4. VALIDACIÓN DEL CÓDIGO DE VERIFICACIÓN SIMULADO ---
+        document.getElementById('btn-verify').addEventListener('click', () => {
+            let codigoEntrada = "";
+            inputs.forEach(input => codigoEntrada += input.value);
+            
+            if(codigoEntrada.length === 4) {
+                alert('¡Código verificado con éxito! Cuenta activada de forma permanente.');
+                document.getElementById('formulario-registro').reset();
+                inputs.forEach(input => input.value = "");
+                container.classList.remove("active");
+            } else {
+                alert('Por favor, ingresa el código completo de 4 dígitos.');
+            }
+        });
+
+
+        // --- 5. CONTROL DE ACCESO (LOGIN) ---
         document.getElementById('formulario-login').addEventListener('submit', function(event) {
             event.preventDefault();
 
             let correoLogin = document.getElementById('login-correo').value;
             let passwordLogin = document.getElementById('login-password').value;
 
-            // Filtro Maestro: Si tú digitas estos datos, accedes al Panel de Control
             if (correoLogin === "admin@origen.com" && passwordLogin === "admin123") {
                 alert("¡Acceso concedido, Desarrollador! Entrando al Panel de Control de Alumnos...");
-                // Aquí enlazaremos la pantalla secreta admin.html más adelante
                 return;
             }
 
-            // Buscar en el Local Storage si los datos coinciden con un alumno permanente
             let usuariosRegistrados = JSON.parse(localStorage.getItem('usuarios_curso')) || [];
             let alumnoEncontrado = usuariosRegistrados.find(u => u.correo === correoLogin && u.password === passwordLogin);
 
             if (alumnoEncontrado) {
                 alert("¡Bienvenido de vuelta, " + alumnoEncontrado.nombre + "! Redirigiendo al curso en el tema: " + alumnoEncontrado.temaActual);
-                // Aquí enlazaremos la pantalla del curso real más adelante
+                window.location.href = "Objetivos.html";
             } else {
                 alert("ERROR: El correo o la contraseña son incorrectos.");
             }
         });
     </script>
-    <!-- CONTENEDOR DE VERIFICACIÓN PREMIUM (Oculto por defecto) -->
-<div id="verification-container" class="verification-box" style="display: none;">
-    <h2>Verifica tu Correo</h2>
-    <p>Hemos enviado un código de 4 dígitos a tu correo electrónico.</p>
-    
-    <div class="code-inputs">
-        <input type="text" maxlength="1" class="otp-input" data-index="0" autocomplete="off">
-        <input type="text" maxlength="1" class="otp-input" data-index="1" autocomplete="off">
-        <input type="text" maxlength="1" class="otp-input" data-index="2" autocomplete="off">
-        <input type="text" maxlength="1" class="otp-input" data-index="3" autocomplete="off">
-    </div>
-
-    <button id="btn-verify" class="btn-premium">Confirmar Código</button>
-    <span class="resend-text">¿No recibiste el código? <a href="#" id="resend-code">Reenviar</a></span>
-</div>
-
-<!-- SCRIPT DE COMPORTAMIENTO (Agrégalo a tu lógica de JS existente) -->
-<script>
-    // Lógica para saltar de una cajita a otra automáticamente
-    const inputs = document.querySelectorAll('.otp-input');
-    
-    inputs.forEach((input, index) => {
-        input.addEventListener('keyup', (e) => {
-            if (e.key >= 0 && e.key <= 9) {
-                if (index < inputs.length - 1) {
-                    inputs[index + 1].focus();
-                }
-            } else if (e.key === "Backspace") {
-                if (index > 0) {
-                    inputs[index - 1].focus();
-                }
-            }
-        });
-    });
-
-    // Función simulada para mostrar esta pantalla (llámala al completar tu localStorage del registro)
-    function mostrarVerificacion() {
-        // Oculta tu formulario de registro actual según tus IDs (Ej: document.getElementById('tu-form-registro').style.display = 'none';)
-        document.getElementById('verification-container').style.display = 'flex';
-    }
-
-    // Validación del botón confirmar
-    document.getElementById('btn-verify').addEventListener('click', () => {
-        let codigoEntrada = "";
-        inputs.forEach(input => codigoEntrada += input.value);
-        
-        if(codigoEntrada.length === 4) {
-            alert('¡Cuenta verificada con éxito! Redireccionando...');
-            window.location.href = "Objetivos.html"; // Cambia a tu pantalla de objetivos
-        } else {
-            alert('Por favor, ingresa el código completo de 4 dígitos.');
-        }
-    });
-</script>
-
 </body>
 </html>
+
