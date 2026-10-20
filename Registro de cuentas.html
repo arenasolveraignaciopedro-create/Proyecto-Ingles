@@ -164,5 +164,60 @@
             }
         });
     </script>
+    <!-- CONTENEDOR DE VERIFICACIÓN PREMIUM (Oculto por defecto) -->
+<div id="verification-container" class="verification-box" style="display: none;">
+    <h2>Verifica tu Correo</h2>
+    <p>Hemos enviado un código de 4 dígitos a tu correo electrónico.</p>
+    
+    <div class="code-inputs">
+        <input type="text" maxlength="1" class="otp-input" data-index="0" autocomplete="off">
+        <input type="text" maxlength="1" class="otp-input" data-index="1" autocomplete="off">
+        <input type="text" maxlength="1" class="otp-input" data-index="2" autocomplete="off">
+        <input type="text" maxlength="1" class="otp-input" data-index="3" autocomplete="off">
+    </div>
+
+    <button id="btn-verify" class="btn-premium">Confirmar Código</button>
+    <span class="resend-text">¿No recibiste el código? <a href="#" id="resend-code">Reenviar</a></span>
+</div>
+
+<!-- SCRIPT DE COMPORTAMIENTO (Agrégalo a tu lógica de JS existente) -->
+<script>
+    // Lógica para saltar de una cajita a otra automáticamente
+    const inputs = document.querySelectorAll('.otp-input');
+    
+    inputs.forEach((input, index) => {
+        input.addEventListener('keyup', (e) => {
+            if (e.key >= 0 && e.key <= 9) {
+                if (index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            } else if (e.key === "Backspace") {
+                if (index > 0) {
+                    inputs[index - 1].focus();
+                }
+            }
+        });
+    });
+
+    // Función simulada para mostrar esta pantalla (llámala al completar tu localStorage del registro)
+    function mostrarVerificacion() {
+        // Oculta tu formulario de registro actual según tus IDs (Ej: document.getElementById('tu-form-registro').style.display = 'none';)
+        document.getElementById('verification-container').style.display = 'flex';
+    }
+
+    // Validación del botón confirmar
+    document.getElementById('btn-verify').addEventListener('click', () => {
+        let codigoEntrada = "";
+        inputs.forEach(input => codigoEntrada += input.value);
+        
+        if(codigoEntrada.length === 4) {
+            alert('¡Cuenta verificada con éxito! Redireccionando...');
+            window.location.href = "Objetivos.html"; // Cambia a tu pantalla de objetivos
+        } else {
+            alert('Por favor, ingresa el código completo de 4 dígitos.');
+        }
+    });
+</script>
+
 </body>
 </html>
