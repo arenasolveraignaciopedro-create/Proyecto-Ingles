@@ -301,26 +301,38 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // 2. Interceptamos SOLO "Tomar Clases" y "Nivel 1" / "Entrar"
+    // 2. Interceptamos de forma precisa sin tocar los otros botones
     document.addEventListener("click", (e) => {
-        const elemento = e.target.closest("a, button, div");
-        if (!elemento) return;
+        // Ignora clics dentro de nuestra propia ventana modal
+        if (modal.contains(e.target)) return;
 
-        const texto = elemento.innerText.trim();
+        // Sube máximo 3 niveles desde el clic para no agarrar el contenedor de toda la página
+        let actual = e.target;
+        for (let i = 0; i < 4; i++) {
+            if (!actual || actual === document.body) break;
+            
+            const texto = actual.innerText ? actual.innerText.trim() : "";
 
-        if (texto.startsWith("Tomar Clases")) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            document.getElementById("expo-titulo").innerText = vistas.clases.titulo;
-            document.getElementById("expo-cuerpo").innerHTML = vistas.clases.html;
-            modal.style.display = "flex";
-        } 
-        else if (texto === "Entrar" || texto.includes("Nivel 1: El Absoluto Principio")) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            document.getElementById("expo-titulo").innerText = vistas.nivel1.titulo;
-            document.getElementById("expo-cuerpo").innerHTML = vistas.nivel1.html;
-            modal.style.display = "flex";
+            // Si el bloque tiene más de 130 letras, es un contenedor grande: lo ignoramos
+            if (texto.length > 0 && texto.length < 130) {
+                if (texto.startsWith("Tomar Clases")) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    document.getElementById("expo-titulo").innerText = vistas.clases.titulo;
+                    document.getElementById("expo-cuerpo").innerHTML = vistas.clases.html;
+                    modal.style.display = "flex";
+                    return;
+                } 
+                if (texto === "Entrar" || texto.startsWith("Nivel 1: El Absoluto Principio")) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    document.getElementById("expo-titulo").innerText = vistas.nivel1.titulo;
+                    document.getElementById("expo-cuerpo").innerHTML = vistas.nivel1.html;
+                    modal.style.display = "flex";
+                    return;
+                }
+            }
+            actual = actual.parentElement;
         }
     }, true);
 });
