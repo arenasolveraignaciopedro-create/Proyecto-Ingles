@@ -248,16 +248,15 @@
                 window.location.href = "leccion1.html"; // Mandar a la pantalla del alfabeto
             }
         }
-    
-<!-- INICIO DEL BLOQUE TEMPORAL PARA EXPOSICIÓN (Borrar después) -->
+
+
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Creamos una ventana emergente aislada por código
+    // 1. Ventana emergente aislada
     const modal = document.createElement("div");
-    modal.id = "modal-expo-temporal";
     modal.style.cssText = `
         display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         background: rgba(11, 17, 30, 0.85); backdrop-filter: blur(4px);
-        z-index: 9999; justify-content: center; align-items: center; font-family: sans-serif;
+        z-index: 99999; justify-content: center; align-items: center; font-family: sans-serif;
     `;
 
     modal.innerHTML = `
@@ -271,81 +270,64 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
     document.body.appendChild(modal);
 
-    // Función para cerrar
     document.getElementById("expo-cerrar").onclick = () => modal.style.display = "none";
     modal.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; };
 
-    // Función de voz nativa del navegador para la demo
     window.hablarDemo = (texto) => {
         const voz = new SpeechSynthesisUtterance(texto);
         voz.lang = 'en-US';
         window.speechSynthesis.speak(voz);
     };
 
-    // Contenidos de cada botón
     const vistas = {
-        "Tomar Clases": {
+        clases: {
             titulo: "📘 Tomar Clases",
             html: `<p><strong>Lección 1: El Verbo To Be</strong></p>
                    <p style="color:#8b9bb4;">Estructura básica para presentaciones:</p>
-                   <ul style="margin-left: 18px;">
+                   <ul style="margin-left: 18px; margin-top: 8px;">
                        <li><strong>I am</strong> Ignacio (Yo soy Ignacio)</li>
                        <li><strong>You are</strong> my teacher (Usted es mi profesor)</li>
                    </ul>`
         },
-        "Práctica Rápida": {
-            titulo: "🎧 Práctica Rápida de Audio",
-            html: `<p>Escucha la pronunciación de ejemplo:</p>
-                   <button onclick="hablarDemo('Hello, welcome to my English platform!')" style="background:#1976d2; color:white; border:none; padding:10px 16px; border-radius:8px; cursor:pointer; margin-top:8px;">
-                       🔊 Reproducir Audio
-                   </button>
-                   <p style="font-size:12px; color:#8b9bb4; margin-top:10px;"><em>"Hello, welcome to my English platform!"</em></p>`
-        },
-        "Mi Progreso": {
-            titulo: "📊 Mi Progreso",
-            html: `<div style="display:flex; gap:10px; margin-top:10px;">
-                       <div style="background:#0b111e; padding:12px; border-radius:8px; flex:1; text-align:center;">
-                           <div style="color:#2196f3; font-weight:bold; font-size:18px;">A1</div>
-                           <div style="font-size:12px; color:#8b9bb4;">Nivel</div>
-                       </div>
-                       <div style="background:#0b111e; padding:12px; border-radius:8px; flex:1; text-align:center;">
-                           <div style="color:#2196f3; font-weight:bold; font-size:18px;">85%</div>
-                           <div style="font-size:12px; color:#8b9bb4;">Completado</div>
-                       </div>
-                   </div>`
-        },
-        "Entrar": {
+        nivel1: {
             titulo: "🚀 Nivel 1: El Absoluto Principio",
-            html: `<p><strong>Tema 1: Saludos Cotidianos</strong></p>
-                   <p>• Good morning = Buenos días<br>• Nice to meet you = Mucho gusto</p>
-                   <button onclick="hablarDemo('Good morning, nice to meet you')" style="background:#1976d2; color:white; border:none; padding:8px 14px; border-radius:8px; cursor:pointer; margin-top:8px;">
-                       🔊 Escuchar Saludos
+            html: `<p><strong>Módulo A1: El Alfabeto y Saludos Cotidianos</strong></p>
+                   <p style="margin-top: 8px;">• <strong>Good morning</strong> = Buenos días<br>
+                   • <strong>How are you?</strong> = ¿Cómo estás?<br>
+                   • <strong>Nice to meet you</strong> = Mucho gusto</p>
+                   <button onclick="hablarDemo('Good morning, how are you? Nice to meet you!')" style="background:#1976d2; color:white; border:none; padding:10px 16px; border-radius:8px; cursor:pointer; margin-top:12px;">
+                       🔊 Escuchar Pronunciación
                    </button>`
         }
     };
 
-    // 2. Buscamos tus tarjetas y el botón "Entrar" automáticamente en tu página actual
-    const elementos = document.querySelectorAll("div, button, a");
-    elementos.forEach(el => {
-        // Evitamos seleccionar contenedores muy grandes
-        if (el.children.length > 3) return;
-        
-        const texto = el.innerText.trim();
-        for (const clave in vistas) {
-            if (texto.startsWith(clave) || texto === clave) {
-                el.style.cursor = "pointer";
-                el.addEventListener("click", (e) => {
-                    e.stopPropagation();
-                    document.getElementById("expo-titulo").innerText = vistas[clave].titulo;
-                    document.getElementById("expo-cuerpo").innerHTML = vistas[clave].html;
-                    modal.style.display = "flex";
-                });
-            }
+    // 2. Interceptamos SOLO "Tomar Clases" y "Nivel 1" / "Entrar"
+    document.addEventListener("click", (e) => {
+        const elemento = e.target.closest("a, button, div");
+        if (!elemento) return;
+
+        const texto = elemento.innerText.trim();
+
+        if (texto.startsWith("Tomar Clases")) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            document.getElementById("expo-titulo").innerText = vistas.clases.titulo;
+            document.getElementById("expo-cuerpo").innerHTML = vistas.clases.html;
+            modal.style.display = "flex";
+        } 
+        else if (texto === "Entrar" || texto.includes("Nivel 1: El Absoluto Principio")) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            document.getElementById("expo-titulo").innerText = vistas.nivel1.titulo;
+            document.getElementById("expo-cuerpo").innerHTML = vistas.nivel1.html;
+            modal.style.display = "flex";
         }
-    });
+    }, true);
 });
 </script>
-<!-- FIN DEL BLOQUE TEMPORAL -->
+
+    
+
 
 
 </body>
